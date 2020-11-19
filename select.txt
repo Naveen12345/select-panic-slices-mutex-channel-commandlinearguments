@@ -1,0 +1,167 @@
+1)IN case of no case statements
+
+
+package main 
+ 
+func main() { 
+
+select{ } 
+
+	
+} 
+
+OUTPUT:-
+
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [select (no cases)]:
+main.main()
+	/tmp/sandbox901932949/prog.go:5 +0x25
+
+2)
+ package main 
+
+import "fmt"
+
+func main() { 
+ 
+	mychannel:= make(chan int) 
+select{ 
+	case <- mychannel: 
+	
+	default:fmt.Println("Not found") 
+} 
+}
+ 
+OUTPUT:-
+
+Not found
+
+3)
+package main 
+import("fmt"
+"time") 
+	func portal1(channel1 chan string) { 
+		time.Sleep(9*time.Second) 
+		channel1 <- "Welcome to channel 1"
+	} 
+	func portal2(channel2 chan string) { 
+		time.Sleep(3*time.Second) 
+		channel2 <- "Welcome to channel 2"
+	} 
+func main(){ 
+R1:= make(chan string) 
+R2:= make(chan string) 
+
+go portal1(R1) 
+go portal2(R2) 
+
+select{ 
+	case op1:= <- R1: 
+	fmt.Println(op1) 
+
+	case op2:= <- R2: 
+	fmt.Println(op2) 
+} } 
+
+OUTPUT:-
+
+Welcome to channel 2
+
+4)
+
+
+ package main 
+ 
+func main() { 
+ 
+	mychannel:= make(chan int) 
+
+select{ 
+	case <- mychannel: 
+		
+} 
+} 
+
+OUTPUT:-
+
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan receive]:
+main.main()
+	/tmp/sandbox844478092/prog.go:8 +0x57
+
+5)
+package main 
+
+import "fmt" 
+	func portal2(channel2 chan string){ 
+		for i := 0; i <= 3; i++{ 
+			channel2 <- "Welcome to channel 2"
+		} 
+		
+	} 
+
+	func portal1(channel1 chan string){ 
+		channel1 <- "Welcome to channel 1"
+	} 
+ 
+func main() { 
+	
+
+R1:= make(chan string) 
+R2:= make(chan string) 
+go portal1(R1) 
+go portal2(R2) 
+
+select{ 
+	case op1:= <- R1: 
+	fmt.Println(op1) 
+	case op2:= <- R2: 
+	fmt.Println(op2) 
+} 
+} 
+
+OUTPUT:-
+
+Welcome to channel 2
+
+6)
+
+
+
+package main
+import (
+    "fmt"
+    "time"
+)
+func main() {
+
+
+    c1 := make(chan string)
+    c2 := make(chan string)
+
+    go func() {
+        time.Sleep(1 * time.Second)
+        c1 <- "one"
+    }()
+    go func() {
+        time.Sleep(2 * time.Second)
+        c2 <- "two"
+    }()
+
+
+    for i := 0; i < 2; i++ {
+        select {
+        case msg1 := <-c1:
+            fmt.Println("received", msg1)
+        case msg2 := <-c2:
+            fmt.Println("received", msg2)
+        }
+    }
+}
+
+OUTPUT:-
+
+received one
+received two

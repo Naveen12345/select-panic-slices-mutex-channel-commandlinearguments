@@ -1,0 +1,231 @@
+Syntax:-
+
+mutex.Lock() 
+
+x = x + 1 // this statement be executed
+          // by only one Goroutine 
+          // at any point of time  
+
+mutex.Unlock()
+
+1)
+
+package main   
+import (   
+    "fmt"
+    "sync" 
+) 
+var GFG  = 0 
+func worker(wg *sync.WaitGroup) {   
+    GFG = GFG + 1 
+    wg.Done() 
+} 
+func main() {  
+    var w sync.WaitGroup 
+    for i := 0; i < 1000; i++ { 
+        w.Add(1)         
+        go worker(&w) 
+    } 
+    w.Wait() 
+    fmt.Println("Value of x", GFG) 
+} 
+
+OUTPUT:-
+
+Value of x 924
+
+2)
+
+
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+
+package main   
+import (   
+    "fmt"
+    "sync" // to import sync later on 
+) 
+var GFG  = 0  
+func worker(wg *sync.WaitGroup, m *sync.Mutex) {  
+    m.Lock()  
+    GFG = GFG + 1 
+    m.Unlock() 
+  
+    wg.Done() 
+} 
+func main() {    
+    var w sync.WaitGroup  
+    var m sync.Mutex 
+    for i := 0; i < 1000; i++ { 
+        w.Add(1)         
+        go worker(&w, &m) 
+    } 
+    w.Wait() 
+    fmt.Println("Value of x", GFG) 
+} 
+
+OUTPUT:-
+
+Value of x 1000
+
+3)
+
+
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+var (
+    mutex   sync.Mutex
+    balance int
+)
+
+func init() {
+    balance = 1000
+}
+
+func deposit(value int, wg *sync.WaitGroup) {
+    mutex.Lock()
+    fmt.Printf("Depositing %d to account with balance: %d\n", value, balance)
+    balance += value
+    mutex.Unlock()
+    wg.Done()
+}
+func withdraw(value int, wg *sync.WaitGroup) {
+    mutex.Lock()
+    fmt.Printf("Withdrawing %d from account with balance: %d\n", value, balance)
+    balance -= value
+    mutex.Unlock()
+    wg.Done()
+}
+func main() {
+    fmt.Println("Go Mutex Example")
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+    go withdraw(700, &wg)
+    go deposit(500, &wg)
+    wg.Wait()
+
+    fmt.Printf("New Balance %d\n", balance)
+}
+
+OUTPUT:-
+
+Go Mutex Example
+Depositing 500 to account with balance: 1000
+Withdrawing 700 from account with balance: 1500
+New Balance 800
+
+4)
+
+
+package main
+ 
+import (
+    "fmt"
+    "sync"
+)
+ 
+type calculation struct{
+    sum int
+}
+ 
+func main() {
+ 
+    test := calculation{}
+    test.sum = 0
+    wg := sync.WaitGroup{}
+    for i:=0; i<500; i++{
+        wg.Add(1)
+        go dosomething(&test, &wg)
+    }
+    wg.Wait()
+    fmt.Println(test.sum)
+}
+ 
+func dosomething(test *calculation , wg *sync.WaitGroup) {
+    test.sum++
+    wg.Done()
+}
+
+OUTPUT:-
+
+500
+
+
+5)
+
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	m := map[int]int{}
+
+	mux := &sync.RWMutex{}
+
+	go writeLoop(m, mux)
+	go readLoop(m, mux)
+	go readLoop(m, mux)
+	go readLoop(m, mux)
+	go readLoop(m, mux)
+
+	block := make(chan struct{})
+	<-block
+}
+
+func writeLoop(m map[int]int, mux *sync.RWMutex) {
+	for {
+		for i := 0; i < 100; i++ {
+			mux.Lock()
+			m[i] = i
+			mux.Unlock()
+		}
+	}
+}
+
+func readLoop(m map[int]int, mux *sync.RWMutex) {
+	for {
+		mux.RLock()
+		for k, v := range m {
+			fmt.Println(k, "-", v)
+		}
+		mux.RUnlock()
+	}
+}
+
+OUTPUT:-
+
+timeout running program
+0 - 0
+0 - 0
+0 - 0
+0 - 0
+1 - 1
+0 - 0

@@ -1,0 +1,273 @@
+Syntax:-
+
+var Channel_name chan Type
+
+1)
+
+ package main 
+
+import "fmt"
+
+func main() { 
+
+
+	var mychannel chan int
+	fmt.Println("Value of my channel: ", mychannel) 
+	fmt.Printf("Type of the channel: %T ", mychannel) 
+
+	mychannel1 := make(chan int) 
+	fmt.Println("\nValue of my channel1: ", mychannel1) 
+	fmt.Printf("Type of the channel1: %T ", mychannel1) 
+} 
+
+
+OUTPUT:-
+
+Value of the channel:  <nil>
+Type of the channel: chan int 
+Value of the channel1:  0xc000066060
+Type of the channel1: chan int
+
+2)
+
+ package main 
+
+import "fmt"
+
+func myfunc(ch chan int) { 
+
+	fmt.Println(2000 + <-ch) 
+} 
+func main() { 
+	fmt.Println("starting Main method")
+	ch := make(chan int) 
+
+	go myfunc(ch) 
+	ch <- 28 
+	fmt.Println("Ending Main method") 
+} 
+
+OUTPUT:-
+
+starting Main method
+2028
+Ending Main method
+
+3)
+
+package main 
+
+import "fmt"
+
+func myfun(mychnl chan string) { 
+
+	for v := 0; v < 4; v++ { 
+		mychnl <- "Naveen jalli"
+	} 
+	close(mychnl) 
+} 
+
+func main() { 
+
+	c := make(chan string) 
+ 
+	go myfun(c) 
+
+ 
+	for { 
+		res, ok := <-c 
+		if ok == false { 
+			fmt.Println("Channel Close ", ok) 
+			break
+		} 
+		fmt.Println("Channel Open for ", res, ok) 
+	} 
+} 
+
+
+OUTPUT:-
+
+Channel Open for  Naveen jalli true
+Channel Open for  Naveen jalli true
+Channel Open for  Naveen jalli true
+Channel Open for  Naveen jalli true
+Channel Close  false
+
+4)
+
+package main 
+
+import "fmt"
+  
+func main() { 
+ 
+	mychnl := make(chan string, 4) 
+	mychnl <- "A"
+	mychnl <- "B"
+	mychnl <- "C"
+	mychnl <- "Kloudlearn"
+
+
+	fmt.Println("Length of the channel is: ", len(mychnl)) 
+} 
+
+OUTPUT:-
+
+Length of the channel is:  4
+
+5)
+
+ package main 
+
+import "fmt"
+ 
+func main() { 
+
+ 
+	mychnl := make(chan string, 5) 
+	mychnl <- "ant"
+	mychnl <- "bat"
+	mychnl <- "cat"
+	mychnl <- "dog"
+ 
+	fmt.Println("Capacity of the channel is: ", cap(mychnl)) 
+} 
+
+OUTPUT:-
+
+Capacity of the channel is:  5
+
+6)
+
+package main
+
+import (  
+    "fmt"
+    "time"
+)
+
+func hello() {  
+    fmt.Println("Hello channels")
+}
+func main() {  
+    go hello()
+    time.Sleep(1 * time.Second)
+    fmt.Println("main function")
+}
+
+OUTPUT:-
+
+Hello channels
+main function
+
+7)
+
+package main
+
+import (  
+    "fmt"
+    "time"
+)
+
+func hello(done chan bool) {  
+    fmt.Println("goroutine is ready to sleep")
+    time.Sleep(4 * time.Second)
+    fmt.Println("hello go routine awake and going to write to done")
+    done <- true
+}
+func main() {  
+    done := make(chan bool)
+    fmt.Println("calling hello goroutine")
+    go hello(done)
+    <-done
+    fmt.Println("Main received data")
+}
+
+OUTPUT:-
+
+calling hello goroutine
+goroutine is ready to sleep
+hello go routine awake and going to write to done
+Main received data
+
+8)
+
+package main
+
+import "fmt"
+
+func sendData(sendch chan<- int) {  
+    sendch <- 2020
+}
+
+func main() {  
+    chnl := make(chan int)
+    go sendData(chnl)
+    fmt.Println(<-chnl)
+}
+
+OUTPUT:-
+
+2020
+
+9)
+package main
+
+import (  
+    "fmt"
+)
+
+func producer(chnl chan int) {  
+    for i := 0; i < 5; i++ {
+        chnl <- i
+    }
+    close(chnl)
+}
+func main() {  
+    ch := make(chan int)
+    go producer(ch)
+    for v := range ch {
+        fmt.Println("Received ",v)
+    }
+}
+
+
+OUTPUT:-
+
+Received  0
+Received  1
+Received  2
+Received  3
+Received  4
+10)
+package main
+
+import (  
+    "fmt"
+)
+
+func producer(chnl chan int) {  
+    for i := 0; i < 5; i++ {
+        chnl <- i
+    }
+    close(chnl)
+}
+func main() {  
+    ch := make(chan int)
+    go producer(ch)
+    for {
+        v, ok := <-ch
+        if ok == false {
+            break
+        }
+        fmt.Println("Received ", v, ok)
+    }
+}
+
+OUTPUT:-
+
+Received  0 true
+Received  1 true
+Received  2 true
+Received  3 true
+Received  4 true

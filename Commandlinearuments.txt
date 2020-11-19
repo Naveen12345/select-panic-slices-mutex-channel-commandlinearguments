@@ -1,0 +1,217 @@
+1)
+
+package main  
+  
+import (  
+    "fmt"  
+    "os"  
+)  
+func main() {  
+    var s, arg string  
+    for i := 1; i < len(os.Args); i++ {  
+        s += arg + os.Args[i]+" "  
+    }  
+    fmt.Println(s)  
+}  
+
+OUTPUT:-
+
+
+command
+
+2)
+
+package main 
+  
+import ( 
+    "fmt"
+    "os"
+) 
+  
+func main() { 
+  
+    
+    ProgramName := os.Args[0] 
+      
+    
+    fmt.Println(ProgramName) 
+}
+
+OUTPUT:-
+
+/tmpfs/play
+
+Program exited.
+
+
+3)
+
+
+
+package main
+
+
+import (
+	"flag"
+	"fmt"
+)
+
+func main() {
+
+	
+	wordPtr := flag.String("Tech", "Golang", "a string")
+
+	
+	numbPtr := flag.Int("numb", 2020, "an int")
+	boolPtr := flag.Bool("fork", false, "a bool")
+
+	
+	var svar string
+	flag.StringVar(&svar, "svar", "bar", "a string var")
+
+	
+	flag.Parse()
+
+	
+	fmt.Println("word:", *wordPtr)
+	fmt.Println("numb:", *numbPtr)
+	fmt.Println("fork:", *boolPtr)
+	fmt.Println("svar:", svar)
+	fmt.Println("tail:", flag.Args())
+}
+
+OUTPUT:-
+
+Tech: Golang
+numb: 2020
+fork: false
+svar: bar
+tail: []
+
+Program exited.
+
+4)package main
+ 
+import (
+    "os"
+    "fmt"
+)
+ 
+func main() {
+        
+    programName := os.Args[0]
+    fmt.Println(programName)
+}
+
+OUTPUT:-
+
+/tmpfs/play
+
+Program exited.
+
+
+5)package main
+ 
+import (
+    "fmt"
+    "os"
+)
+ 
+func main() {
+    argLength := len(os.Args[1:])
+        
+    fmt.Printf("Arg length is %d", argLength) 
+}
+
+
+OUTPUT:-
+
+Arg length is 5
+Program exited.
+
+6)
+
+package main
+ 
+import (
+    "fmt"
+    "os"
+)
+ 
+func main() {
+        
+    argLength := len(os.Args[1:])  
+    fmt.Printf("Arg length is %d\n", argLength)
+ 
+    for i, a := range os.Args[1:] {
+        fmt.Printf("Arg %d is %s\n", i+1, a) 
+    }
+}
+
+
+OUTPUT:- 
+
+Arg length is 3
+Arg 1 is -a
+Arg 2 is -b
+Arg 3 is --c=d
+
+7)
+
+package main
+ 
+import (
+    "flag"
+    "fmt"
+)
+ 
+func main() {
+   
+    var username string    
+    var password string      
+ 
+    
+    flag.StringVar(&username, "u", "root", "Specify username. Default is root")
+    flag.StringVar(&password, "p", "password", "Specify pass. Default is password")
+ 
+    flag.Parse()  
+ 
+    
+    if username == "root" && password == "password" {
+        fmt.Printf("Logging in")
+    } else {
+        fmt.Printf("Invalid credentials!")
+    }
+}
+
+
+OUTPUT:-
+
+Logging in
+Program exited.
+
+8)
+package main
+ 
+import (
+    "flag"
+    "fmt"
+)
+ 
+func main() {
+    var name string
+    flag.StringVar(&name, "n", "admin", "Specify name. Default is admin.")
+ 
+    flag.Usage = func() {
+        fmt.Printf("Usage of our Program: \n")
+        fmt.Printf("./go-project -n username\n")
+        
+    }
+    flag.Parse()
+}
+
+OUTPUT:-
+
+Usage of our Program:
+./go-project -n username
+

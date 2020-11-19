@@ -1,0 +1,267 @@
+Syntax:-
+
+1)[]T
+ 
+2)[]T{}
+ 
+3)[]T{value1, value2, value3, ...value n}
+
+Example:-
+
+var slice1[]int
+
+1)
+
+
+package main 
+  
+import "fmt"
+  
+func main() { 
+    arr := [4]string{"This", "is", "about", "slice"} 
+
+    fmt.Println("Array:", arr) 
+ 
+    myslice := arr[2:4] 
+
+    fmt.Println("Slice:", myslice) 
+ 
+    fmt.Printf("Length of the slice: %d", len(myslice)) 
+
+    fmt.Printf("\nCapacity of the slice: %d", cap(myslice)) 
+} 
+
+OUTPUT:-
+
+Array: [This is about slice]
+Slice: [about slice]
+Length of the slice: 2
+Capacity of the slice: 2
+
+2)
+
+package main 
+  
+import "fmt"
+  
+func main() { 
+
+    var slice1 = []string{"Kloud", "Learn", "App"} 
+  
+    fmt.Println("Slice 1:", slice1) 
+
+    slice2 := []int{1, 2, 3, 4, 5, 6, 7} 
+    fmt.Println("Slice 2:", slice2) 
+} 
+
+OUTPUT:-
+
+Slice 1: [Kloud Learn App]
+Slice 2: [1 2 3 4 5 6 7]
+
+3)
+
+package main  
+import "fmt"  
+func main() { 
+    arr := [4]string{"n", "a", "v", "y"} 
+    var slice1 = arr[1:2] 
+    slice2 := arr[0:] 
+    slice3 := arr[:2] 
+    slice4 := arr[:] 
+ 
+    fmt.Println("My Array: ", arr) 
+    fmt.Println("Slice 1: ", slice1) 
+    fmt.Println("Slice 2: ", slice2) 
+    fmt.Println("Slice 3: ", slice3) 
+    fmt.Println("Slice 4: ", slice4) 
+} 
+
+OUTPUT:-
+
+My Array:  [n a v y]
+Slice 1:  [a]
+Slice 2:  [n a v y]
+Slice 3:  [n a]
+Slice 4:  [n a v y]
+
+
+4)
+
+package main 
+  
+import "fmt"
+  
+func main() { 
+
+    slice := []int{1, 2, 3, 4, 
+        5, 6, 7} 
+
+    var slice1 = slice[1:5] 
+     slice2 := slice[0:] 
+     slice3 := slice[:6] 
+     slice4 := slice[:] 
+     slice5 := slice3[2:4] 
+    fmt.Println("Original Slice:", slice) 
+    fmt.Println("New Slice 1:", slice1) 
+    fmt.Println("New Slice 2:", slice2) 
+    fmt.Println("New Slice 3:", slice3) 
+    fmt.Println("New Slice 4:", slice4) 
+    fmt.Println("New Slice 5:", slice5) 
+} 
+
+OUTPUT:-
+
+Original Slice: [1 2 3 4 5 6 7]
+New Slice 1: [2 3 4 5]
+New Slice 2: [1 2 3 4 5 6 7]
+New Slice 3: [1 2 3 4 5 6]
+New Slice 4: [1 2 3 4 5 6 7]
+New Slice 5: [3 4]
+
+5)
+
+ 
+package main 
+  
+import "fmt"
+  
+func main() { 
+
+    var my_slice_1 = make([]int, 4, 7) 
+    fmt.Printf("Slice 1 = %v, \nlength = %d, \ncapacity = %d\n", 
+                   my_slice_1, len(my_slice_1), cap(my_slice_1)) 
+
+    var my_slice_2 = make([]int, 7) 
+    fmt.Printf("Slice 2 = %v, \nlength = %d, \ncapacity = %d\n", 
+                   my_slice_2, len(my_slice_2), cap(my_slice_2)) 
+      
+} 
+
+OUTPUT:-
+
+Slice 1 = [0 0 0 0], 
+length = 4, 
+capacity = 7
+Slice 2 = [0 0 0 0 0 0 0], 
+length = 7, 
+capacity = 7
+
+6)
+
+ 
+package main 
+  
+import "fmt"
+  
+func main() { 
+  
+ 
+    myslice := []string{"K", "l", "o", "u", 
+        "d", "o", "n","e"} 
+  
+
+    for i := 0; i < len(myslice); i++ { 
+        fmt.Println(myslice[i]) 
+    } 
+}
+
+OUTPUT:-
+  
+K
+l
+o
+u
+d
+o
+n
+e
+
+7)
+
+package main 
+  
+import "fmt"
+  
+func main() { 
+ 
+    myslice := []string{"Welcome", "to", "Kloud", "One", 
+                                 "technology", "Go", "lang"} 
+  
+    for index, ele := range myslice { 
+        fmt.Printf("Index = %d and element = %s\n", index+3, ele) 
+    } 
+}  
+
+OUTPUT:-
+
+Index = 3 and element = Welcome
+Index = 4 and element = to
+Index = 5 and element = Kloud
+Index = 6 and element = One
+Index = 7 and element = technology
+Index = 8 and element = Go
+Index = 9 and element = lang
+
+8)
+
+
+package main 
+
+import "fmt"
+
+func main() { 
+
+	myslice := []string{"welcome", "to", "golang", 
+		"world", "!", "!", "!"} 
+ 
+	for _, ele := range myslice { 
+		fmt.Printf("Element = %s\n", ele) 
+	} 
+} 
+
+OUTPUT:-
+  
+Element = welcome
+Element = to
+Element = golang
+Element = world
+Element = !
+Element = !
+Element = !
+
+9)
+
+ 
+package main 
+  
+import "fmt"
+  
+func main() { 
+
+    var myslice []string 
+    fmt.Printf("Length = %d\n", len(myslice)) 
+    fmt.Printf("Capacity = %d ", cap(myslice)) 
+  
+} 
+
+OUTPUT:-
+
+Length = 0
+Capacity = 0 
+
+10)package main 
+
+import "fmt"
+
+func main() { 
+
+	s1 := []int{12, 34, 56} 
+	var s2 []int
+	fmt.Println(s1 == nil) 
+	fmt.Println(s2 == nil) 
+} 
+
+OUTPUT:-
+false
+true

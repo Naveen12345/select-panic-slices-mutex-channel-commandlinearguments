@@ -1,0 +1,290 @@
+Syntax:-
+
+// Function
+defer func func_name(parameter_list Type)return_type{
+// Code
+}
+
+// Method
+defer func (receiver Type) method_name(parameter_list){
+// Code
+}
+
+defer func (parameter_list)(return_type){
+// code
+}()
+
+
+1)
+
+ 
+package main 
+
+import "fmt"
+ 
+func mul(a1, a2 int) int { 
+
+	res := a1 * a2 
+	fmt.Println("Result: ", res) 
+	return 0 
+} 
+
+func show() { 
+	fmt.Println("Hello!, Kloudlearn") 
+} 
+func main() { 
+
+	mul(10, 25) 
+ 
+	defer mul(10, 100) 
+
+	show() 
+}
+ 
+OUTPUT:-
+
+Result:  250
+Hello!, Kloudlearn
+Result:  1000
+
+2)
+
+package main 
+  
+import "fmt"
+ 
+func add(a1, a2 int) int { 
+    res := a1 + a2 
+    fmt.Println("Result: ", res) 
+    return 0 
+} 
+
+func main() { 
+  
+    fmt.Println("Start") 
+
+    defer fmt.Println("End") 
+    defer add(16, 20) 
+    defer add(23, 12) 
+} 
+
+OUTPUT:-
+
+Start
+Result:  35
+Result:  36
+End
+
+3)
+
+package main 
+
+import "fmt"
+
+func main() { 
+	defer fmt.Println("1") 
+	defer fmt.Println("2") 
+	fmt.Println("3") 
+} 
+
+OUTPUT:-
+
+3
+2
+1
+
+4)
+
+package main 
+
+import "fmt"
+
+func main() {
+        defer fmt.Println("World")
+        fmt.Println("Hello")
+
+} 
+
+OUTPUT:-
+
+Hello
+World
+
+5)
+
+package main 
+
+import "fmt"
+
+func main() {
+        fmt.Println("start")
+        for i := 1; i <= 10; i++ {
+              defer fmt.Println(i)
+        }
+        fmt.Println("end")
+}
+
+
+OUTPUT:-
+
+start
+end
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+
+6)
+
+package main 
+
+import "fmt"
+
+func main() {
+        fmt.Println("start")
+              defer fmt.Println("middle")
+        fmt.Println("end")
+}
+
+
+OUTPUT:-
+
+start
+end
+middle
+
+7)
+
+package main
+
+import (  
+    "fmt"
+)
+
+func finished() {  
+    fmt.Println("Finished finding largest")
+}
+func largest(nums []int) {  
+    defer finished()    
+    fmt.Println("Started finding largest")
+    max := nums[0]
+    for _, v := range nums {
+        if v > max {
+            max = v
+        }
+    }
+    fmt.Println("Largest number in", nums, "is", max)
+}
+func main() {  
+    nums := []int{1, 25, 2, 336, 300}
+    largest(nums)
+}
+
+
+OUTPUT:-
+
+Started finding largest
+Largest number in [1 25 2 336 300] is 336
+Finished finding largest
+
+
+
+8)
+package main 
+  
+import "fmt"
+  
+
+func main() {
+    defer fmt.Println("Naveen")
+    panic("Stop")
+    fmt.Println("Hello")
+}
+
+OUTPUT:-
+
+Naveen
+panic: Stop
+
+9)
+
+package main  
+  
+import "os"  
+  
+func main() {  
+    panic("Error Situation")  
+    _, err := os.Open("/tmp/file")  
+    if err != nil {  
+        panic(err)  
+    }  
+}  
+
+
+OUTPUT:-
+
+panic: Error Situation
+
+goroutine 1 [running]:
+main.main()
+	/tmp/sandbox963279701/prog.go:6 +0x39
+
+Program exited: status 2.
+
+10)
+package main  
+  
+import "fmt"  
+func main() {  
+    fmt.Println("Calling x from main.")  
+    x()  
+    fmt.Println("Returned from x.")  
+}  
+func x() {  
+    defer func() {  
+        if r := recover(); r != nil {  
+            fmt.Println("Recovered in x", r)  
+        }  
+    }()  
+    fmt.Println("Executing x...")  
+    fmt.Println("Calling y.")  
+    y(0)  
+    fmt.Println("Returned normally from y.")  
+}  
+  
+func y(i int) {  
+    fmt.Println("Executing y....")  
+    if i > 2 {  
+        fmt.Println("Panicking!")  
+        panic(fmt.Sprintf("%v" , i))  
+    }  
+    defer fmt.Println("Defer in y", i)  
+    fmt.Println("Printing in y", i)  
+    y(i + 1)  
+}   
+OUTPUT:-
+OUTPUT:-
+
+Calling x from main.
+Executing x...
+Calling y.
+Executing y....
+Printing in y 0
+Executing y....
+Printing in y 1
+Executing y....
+Printing in y 2
+Executing y....
+Panicking!
+Defer in y 2
+Defer in y 1
+Defer in y 0
+Recovered in x 3
+Returned from x.
+
